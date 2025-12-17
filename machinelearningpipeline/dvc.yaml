@@ -1,0 +1,30 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - Data/raw/pima_diabetes_synthetic.csv
+    - src/preprocess.py
+    params:
+    - params.yaml:preprocess.input
+    - params.yaml:preprocess.output
+    outs:
+    - Data/processed/pima_diabetes_synthetic.csv
+  train:
+    cmd: python src/train.py
+    deps:
+    - Data/processed/pima_diabetes_synthetic.csv
+    - src/train.py
+    params:
+    - params.yaml:train.data
+    - params.yaml:train.model
+    - params.yaml:train.random_state
+    - params.yaml:train.n_estimators
+    - params.yaml:train.max_depth
+    outs:
+    - models/logistic_regression_model.pkl
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - Data/raw/pima_diabetes_synthetic.csv
+    - models/logistic_regression_model.pkl
+    - src/evaluate.py
